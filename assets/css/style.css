@@ -1,0 +1,81 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #343a40;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+    height: 100px;
+    position: relative;
+}
+
+.table th {
+    background-color: #007bff;
+    color: white;
+}
+
+.appointment {
+    background-color: #6c757d;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    font-size: 0.9rem;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    cursor: not-allowed;
+}
+
+.appointment:hover {
+    background-color: #5a6268;
+}
+
+.modal-header, .modal-footer {
+    background-color: #f1f1f1;
+}
+
+.date-cell {
+    cursor: pointer;
+}
+
+.occupied-time {
+    cursor: not-allowed;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 3px;
+}
+
+.available-time {
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+    margin: 3px;
+    cursor: pointer;
+}
+
+.available-time:hover {
+    background-color: #218838;
+}
+
+.selected-time {
+    background-color: #ffc107;
+    color: white;
+    border-radius: 5px;
+    padding: 5px;
+}

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Agendamentos de Cortes de Cabelo</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            text-align: center;
+        }
+
+        section {
+            margin: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .button-container button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+
+        .button-container button:hover {
+            background-color: #45a049;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+
+        form label {
+            margin: 10px 0 5px;
+        }
+
+        form input, form select {
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .table-container {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button.remove-btn {
+            background-color: #ff0000;
+            border: none;
+            padding: 5px 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button.remove-btn:hover {
+            background-color: #e60000;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Painel Administrativo - Agendamentos de Cortes de Cabelo</h1>
+    </header>
+
+    <section>
+        <div class="button-container">
+            <!-- Botões de navegação administrativa -->
+            <button onclick="window.location.href='listagem-agendamentos.html'">Lista de Agendamentos</button>
+            <button onclick="window.location.href='admin.html'">Voltar ao Painel</button>
+        </div>
+
+        <!-- Formulário para bloquear ou liberar um dia -->
+        <h2>Gerenciar Dias Disponíveis</h2>
+        <form id="blockDayForm">
+            <label for="blockDate">Escolher Data para Bloquear:</label>
+            <input type="date" id="blockDate" name="blockDate">
+            <button type="button" id="blockButton">Bloquear Dia</button>
+        </form>
+
+        <form id="unblockDayForm">
+            <label for="unblockDate">Escolher Data para Liberar:</label>
+            <input type="date" id="unblockDate" name="unblockDate">
+            <button type="button" id="unblockButton">Liberar Dia</button>
+        </form>
+
+        <hr>
+
+        <!-- Formulário para agendamento manual -->
+        <h2>Agendar Cliente Manualmente</h2>
+        <form id="manualBookingForm">
+            <label for="manualName">Nome do Cliente:</label>
+            <input type="text" id="manualName" name="manualName" placeholder="Digite o nome do cliente" required>
+
+            <label for="manualWhatsapp">WhatsApp do Cliente:</label>
+            <input type="text" id="manualWhatsapp" name="manualWhatsapp" placeholder="Digite o número de WhatsApp" required>
+
+            <label for="manualDate">Data do Agendamento:</label>
+            <input type="date" id="manualDate" name="manualDate" required>
+
+            <button type="button" id="manualBookButton">Agendar</button>
+        </form>
+
+        <hr>
+
+        <!-- Tabela de agendamentos -->
+        <div class="table-container">
+            <h2>Agendamentos Realizados</h2>
+            <table id="agendamentosTable">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Nome</th>
+                        <th>WhatsApp</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody id="agendamentosTableBody">
+                    <!-- Agendamentos serão carregados aqui dinamicamente -->
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>

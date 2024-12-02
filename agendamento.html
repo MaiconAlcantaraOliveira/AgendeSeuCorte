@@ -1,0 +1,26 @@
+<!-- Modal de Agendamento -->
+<div id="modal" class="hidden">
+    <div class="modal-content">
+        <h2>Agende seu corte de cabelo</h2>
+        <form id="schedule-form">
+            <label for="name">Nome:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="whatsapp">WhatsApp:</label>
+            <input type="text" id="whatsapp" name="whatsapp" required>
+
+            <label for="service">Tipo de serviço:</label>
+            <select id="service" name="service" required>
+                <option value="haircut">Corte de cabelo</option>
+                <option value="beard">Barba</option>
+                <option value="both">Corte e barba</option>
+            </select>
+
+            <label for="selected-date">Data Selecionada:</label>
+            <input type="text" id="selected-date" name="selected-date" readonly required>
+
+            <button type="submit">Agendar</button>
+            <button type="button" id="close-modal">Cancelar</button>
+        </form>
+    </div>
+</div>
