@@ -1,3 +1,4 @@
+/* Estilo do corpo da página */
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f9fa;
@@ -12,54 +13,38 @@ header {
     text-align: center;
 }
 
+/* Estilo das células da tabela */
 .table th, .table td {
     border: 1px solid #ddd;
     text-align: center;
     vertical-align: middle;
     padding: 10px;
-    height: 100px;
     position: relative;
 }
 
+/* Estilo do cabeçalho das células */
 .table th {
     background-color: #007bff;
     color: white;
 }
 
-.appointment {
-    background-color: #6c757d;
-    color: white;
-    border-radius: 5px;
-    padding: 5px;
-    font-size: 0.9rem;
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    cursor: not-allowed;
-}
-
-.appointment:hover {
-    background-color: #5a6268;
-}
-
-.modal-header, .modal-footer {
-    background-color: #f1f1f1;
-}
-
-.date-cell {
-    cursor: pointer;
-}
-
+/* Estilo de agendamento ocupado */
 .occupied-time {
-    cursor: not-allowed;
-    background-color: #dc3545;
-    color: white;
-    border-radius: 5px;
-    padding: 5px;
-    margin: 3px;
+    background-color: #ffcccb;
+    color: #333;
+    font-size: 12px;
+    padding: 3px;
+    margin: 2px 0;
+    border-radius: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    width: 100%;
+    display: block;
 }
 
+/* Estilo de horário disponível */
 .available-time {
     background-color: #28a745;
     color: white;
@@ -67,15 +52,89 @@ header {
     padding: 5px;
     margin: 3px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .available-time:hover {
     background-color: #218838;
 }
 
+/* Estilo do horário selecionado */
 .selected-time {
     background-color: #ffc107;
     color: white;
     border-radius: 5px;
     padding: 5px;
+}
+
+/* Estilos das células do calendário */
+#calendarBody td {
+    height: 100px;  /* Altura fixa para as células */
+    width: 100px;   /* Largura fixa */
+    vertical-align: top;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    padding: 5px;
+    cursor: pointer;
+}
+
+/* Ajustes para células vazias */
+#calendarBody td.empty {
+    background-color: #e9ecef;
+}
+
+/* Layout flexível para os agendamentos */
+.appointment, .occupied-time, .available-time {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+/* Container para os agendamentos */
+#calendarBody td .appointments-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow-y: auto;
+    max-height: 90%;  /* Limitar altura para evitar que ultrapasse a célula */
+    padding: 0;
+    width: 100%;
+}
+
+/* Rolagem personalizada para agendamentos */
+#calendarBody td .appointments-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#calendarBody td .appointments-container::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 5px;
+}
+
+/* Melhor controle de largura para os horários */
+.appointment, .occupied-time, .available-time {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
+}
+
+/* Estilo da célula de data selecionada */
+#calendarBody td[data-selected="true"] {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Estilo da modal */
+.modal-header, .modal-footer {
+    background-color: #f1f1f1;
+    color: #333;
+}
+
+.disabled-day {
+    background-color: #d3d3d3; /* Cor de fundo cinza */
+    color: #a9a9a9; /* Cor do texto em cinza claro */
+    pointer-events: none; /* Desabilita interação com a célula */
 }
