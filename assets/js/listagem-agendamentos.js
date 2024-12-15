@@ -2,51 +2,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const agendamentosTableBody = document.getElementById('agendamentosTableBody');
     const barberShopId = '5e51932c-b7e3-11ef-b363-a8a159004237'; // ID da barbearia
 
-    const rows = document.querySelectorAll('table tr'); // Seleciona todas as linhas da tabela
+    // Mapeamento de cores fixas para cada dia do mês (1 a 31)
+    const dayColors = {};
 
-    // Função para gerar uma cor aleatória
-    function getRandomColor() {
-        const letters = '0123456789ABCDEF';
-        let color = '#';
-        for (let i = 0; i < 6; i++) {
-            color += letters[Math.floor(Math.random() * 16)];
+    // Função para gerar uma cor clara com base no número do dia
+    function getColorForDay(day) {
+        if (!dayColors[day]) {
+            const r = Math.floor(200 + (day * 15) % 55); // Tons claros
+            const g = Math.floor(200 + (day * 25) % 55);
+            const b = Math.floor(200 + (day * 35) % 55);
+            dayColors[day] = `rgb(${r}, ${g}, ${b})`;
         }
-        return color;
+        return dayColors[day];
     }
 
-     // Aplica cores aleatórias nas linhas (exceto no cabeçalho)
-     rows.forEach((row, index) => {
-        if (index > 0) { // Ignora o cabeçalho
-            row.style.backgroundColor = getRandomColor();
-        }
-    });
-
-    // Função para formatar a data (para exibir o mês e o dia da semana)
-    function formatDate(dateString) {
-        const date = new Date(dateString);
-        const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-        return date.toLocaleDateString('pt-BR', options);
-    }
-
-    // Carregar agendamentos do backend
+    // Função para carregar os agendamentos
     function loadAppointments(barberShopId) {
         fetch(`https://192.168.2.242:7035/api/appointments/barbershop/${barberShopId}`)
             .then(response => response.json())
             .then(data => {
-                // Transformar array em um objeto organizado por data
                 const appointmentsByDate = {};
 
                 data.forEach(appointment => {
-                    // Extrair a data no formato YYYY-MM-DD
-                    const dateKey = new Date(appointment.date).toISOString();
+                    const dateKey = new Date(appointment.date).toISOString().split('T')[0]; // Apenas a data no formato YYYY-MM-DD
 
                     if (!appointmentsByDate[dateKey]) {
                         appointmentsByDate[dateKey] = [];
                     }
 
                     appointmentsByDate[dateKey].push({
-                        id: appointment.id, // Garantir que o id do agendamento seja passado
-                        startTime: appointment.startTime.slice(0, 5), // Exemplo: "08:30"
+                        id: appointment.id,
+                        startTime: appointment.startTime.slice(0, 5),
                         endTime: appointment.endTime.slice(0, 5),
                         customerName: appointment.customerName,
                         customerPhone: appointment.customerPhone,
@@ -54,96 +40,90 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 });
 
-                // Ordenar as chaves do objeto appointmentsByDate por data
                 const sortedDates = Object.keys(appointmentsByDate).sort((a, b) => new Date(a) - new Date(b));
 
-                // Armazenar os dados no formato esperado
                 window.appointments = {};
-
                 sortedDates.forEach(date => {
-                    // Adiciona os agendamentos ordenados por data
                     window.appointments[date] = appointmentsByDate[date];
                 });
 
-                console.log('Agendamentos processados:', window.appointments); // Para debug
-
-                // Exibir os agendamentos na tabela
                 renderAppointments(window.appointments);
             })
             .catch(error => console.error('Erro ao carregar agendamentos:', error));
     }
 
-    // Função para renderizar os agendamentos na tabela
+    // Função para renderizar os agendamentos
     function renderAppointments(appointmentsByDate) {
-        // Limpar a tabela antes de adicionar os agendamentos
         agendamentosTableBody.innerHTML = '';
 
         for (const dateKey in appointmentsByDate) {
             const appointments = appointmentsByDate[dateKey];
+            const day = new Date(dateKey).getDate(); // Extrai o dia do mês
+            const rowColor = getColorForDay(day); // Obtém a cor fixa para o dia
 
             appointments.forEach(appointment => {
                 const row = document.createElement('tr');
+                row.style.backgroundColor = rowColor; // Aplica a cor fixa
+                row.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.1)'; // Sombra leve
 
-                // Exibir data formatada (mês e dia da semana)
+                // Data
                 const dateCell = document.createElement('td');
-                dateCell.textContent = formatDate(dateKey);
+                dateCell.textContent = new Date(dateKey).toLocaleDateString('pt-BR', {
+                    weekday: 'long',
+                    month: 'long',
+                    day: 'numeric',
+                });
                 row.appendChild(dateCell);
 
-                // Exibir nome do cliente
+                // Cliente
                 const nameCell = document.createElement('td');
                 nameCell.textContent = appointment.customerName;
                 row.appendChild(nameCell);
 
-                // Exibir WhatsApp do cliente
+                // WhatsApp
                 const whatsappCell = document.createElement('td');
                 whatsappCell.textContent = appointment.customerPhone;
                 row.appendChild(whatsappCell);
 
-                // Exibir descrição do serviço
+                // Serviço
                 const serviceCell = document.createElement('td');
                 serviceCell.textContent = appointment.serviceDescription;
                 row.appendChild(serviceCell);
 
-                // Exibir horário de início e fim
+                // Horário
                 const timeCell = document.createElement('td');
                 timeCell.textContent = `${appointment.startTime} - ${appointment.endTime}`;
                 row.appendChild(timeCell);
 
-                // Exibir ações (remover agendamento)
+                // Ações
                 const actionsCell = document.createElement('td');
                 const removeButton = document.createElement('button');
                 removeButton.textContent = 'Remover';
                 removeButton.classList.add('remove-btn');
-                
-                // Passar o ID correto para a função de remoção
                 removeButton.addEventListener('click', () => removeAppointment(appointment.id));
-                
                 actionsCell.appendChild(removeButton);
                 row.appendChild(actionsCell);
 
-                // Adicionar a linha à tabela
                 agendamentosTableBody.appendChild(row);
             });
         }
     }
 
-    // Função para remover um agendamento
+    // Função para remover agendamento
     function removeAppointment(appointmentId) {
-        // Enviar uma requisição DELETE para remover o agendamento
         fetch(`https://192.168.2.242:7035/api/appointments/${appointmentId}`, {
             method: 'DELETE',
         })
-        .then(response => {
-            if (response.ok) {
-                // Recarregar os agendamentos após a exclusão
-                loadAppointments(barberShopId);
-            } else {
-                console.error('Erro ao remover agendamento');
-            }
-        })
-        .catch(error => console.error('Erro ao remover agendamento:', error));
+            .then(response => {
+                if (response.ok) {
+                    loadAppointments(barberShopId);
+                } else {
+                    console.error('Erro ao remover agendamento');
+                }
+            })
+            .catch(error => console.error('Erro ao remover agendamento:', error));
     }
 
-    // Carregar os agendamentos ao carregar a página
+    // Carregar os agendamentos ao iniciar
     loadAppointments(barberShopId);
 });
