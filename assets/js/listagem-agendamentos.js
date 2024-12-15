@@ -2,6 +2,25 @@ document.addEventListener('DOMContentLoaded', () => {
     const agendamentosTableBody = document.getElementById('agendamentosTableBody');
     const barberShopId = '5e51932c-b7e3-11ef-b363-a8a159004237'; // ID da barbearia
 
+    const rows = document.querySelectorAll('table tr'); // Seleciona todas as linhas da tabela
+
+    // Função para gerar uma cor aleatória
+    function getRandomColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+     // Aplica cores aleatórias nas linhas (exceto no cabeçalho)
+     rows.forEach((row, index) => {
+        if (index > 0) { // Ignora o cabeçalho
+            row.style.backgroundColor = getRandomColor();
+        }
+    });
+
     // Função para formatar a data (para exibir o mês e o dia da semana)
     function formatDate(dateString) {
         const date = new Date(dateString);
