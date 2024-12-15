@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const appointmentsByDate = {};
 
                 data.forEach(appointment => {
-                    const dateKey = new Date(appointment.date).toISOString().split('T')[0]; // Apenas a data no formato YYYY-MM-DD
+                    const dateKey = new Date(appointment.date).toISOString().split('T'); // Apenas a data no formato YYYY-MM-DD
 
                     if (!appointmentsByDate[dateKey]) {
                         appointmentsByDate[dateKey] = [];
@@ -54,11 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Função para renderizar os agendamentos
     function renderAppointments(appointmentsByDate) {
+        const today = new Date().toISOString().split('T')[0]; // Data de hoje no formato YYYY-MM-DD
         agendamentosTableBody.innerHTML = '';
 
         for (const dateKey in appointmentsByDate) {
+            if (dateKey < today) {
+                continue; // Ignorar agendamentos anteriores ao dia de hoje
+            }
+
             const appointments = appointmentsByDate[dateKey];
-            const day = new Date(dateKey).getDate(); // Extrai o dia do mês
+            const day = new Date(dateKey).getUTCDate(); // Extrai o dia do mês
             const rowColor = getColorForDay(day); // Obtém a cor fixa para o dia
 
             appointments.forEach(appointment => {
@@ -67,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 row.style.boxShadow = '0px 4px 8px rgba(0, 0, 0, 0.1)'; // Sombra leve
 
                 // Data
+
                 const dateCell = document.createElement('td');
                 dateCell.textContent = new Date(dateKey).toLocaleDateString('pt-BR', {
                     weekday: 'long',

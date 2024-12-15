@@ -119,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
     
                 // Exibir horários ocupados no dia
-                if (window.appointments[dateKey]) {
+                if (window.appointments[dateKey] && cellDate > yesterday) {
                     const appointmentsContainer = document.createElement('div');
                     appointmentsContainer.className = 'appointments-container';
     
@@ -222,7 +222,8 @@ function openModal(dateKey) {
         const whatsappField = document.getElementById('whatsapp');
         const serviceField = document.getElementById('service');
         const barberShopField ='Barbearia XYZ';
-        const serviceDescriptionField = document.getElementById('service');
+        const serviceDescriptionField =  serviceField.options[serviceField.selectedIndex].text;
+
 
     
         if (!nameField || !whatsappField || !serviceField || !barberShopField || !serviceDescriptionField) {
@@ -236,7 +237,7 @@ function openModal(dateKey) {
         const barberShop = barberShopField;         
         const service = serviceField;          // Tipo de serviço
 
-        const serviceDescription =  serviceField;        // Descrição do serviço
+        const serviceDescription =  serviceDescriptionField;        // Descrição do serviço
     
         const selectedSlot = selectedTimeSlot ? selectedTimeSlot.textContent.split(' - ') : [];
         const startTime = selectedSlot[0] || '';
@@ -298,7 +299,7 @@ function openModal(dateKey) {
             date: formattedDate,
             customerName: name,
             customerPhone: whatsapp,
-            serviceDescription: "serviceDescription",
+            serviceDescription: serviceDescription,
             startTime: startTime,
             endTime: endTime
         };

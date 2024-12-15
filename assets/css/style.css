@@ -98,7 +98,7 @@ header {
     flex-direction: column;
     justify-content: flex-start;
     overflow-y: auto;
-    max-height: 90%;  /* Limitar altura para evitar que ultrapasse a célula */
+    max-height: 100%;  /* Limitar altura para evitar que ultrapasse a célula */
     padding: 0;
     width: 100%;
 }
@@ -113,12 +113,14 @@ header {
     border-radius: 5px;
 }
 
-/* Melhor controle de largura para os horários */
+/* Limitar a altura dos agendamentos dentro da célula */
 .appointment, .occupied-time, .available-time {
-    max-width: 100%;
+    display: block;
+    height: 30px;  /* Altura fixa para cada agendamento */
     overflow: hidden;
     text-overflow: ellipsis;
     word-wrap: break-word;
+    margin-bottom: 5px;
 }
 
 /* Estilo da célula de data selecionada */
@@ -137,4 +139,25 @@ header {
     background-color: #d3d3d3; /* Cor de fundo cinza */
     color: #a9a9a9; /* Cor do texto em cinza claro */
     pointer-events: none; /* Desabilita interação com a célula */
+}
+
+/* Ajustes Responsivos */
+@media (max-width: 768px) {
+    /* Para dispositivos móveis, ajustar largura das células e a altura */
+    #calendarBody td {
+        width: 70px;  /* Reduzir a largura das células para dispositivos móveis */
+        height: 80px;  /* Ajuste de altura para celular */
+    }
+
+    /* Limitar a altura máxima dos agendamentos nas células para dispositivos móveis */
+    .appointments-container {
+        max-height: 80%;
+    }
+}
+
+/* Exibir a barra de rolagem apenas quando necessário */
+#calendarBody td .appointments-container {
+    display: block;
+    max-height: calc(3 * 30px);  /* Limite de 3 agendamentos */
+    overflow-y: auto; /* Permite rolar caso haja mais de 3 agendamentos */
 }
